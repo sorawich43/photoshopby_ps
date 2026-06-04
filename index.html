@@ -9,7 +9,7 @@
     <style>
         body { font-family: 'Prompt', sans-serif; }
         
-        /* สไตล์คลาสเมื่อเลือกปุ่มชุดหรือจำนวนรูป แล้วให้กล่องนูนเด่นเด้งออกมา */
+        /* สไตล์คลาสเมื่อเลือกปุ่มชุด ขนาดภาพ หรือจำนวนรูป แล้วให้กล่องนูนเด่นเด้งออกมา */
         .selected-box {
             background-color: #eff6ff !important;
             border-color: #2563eb !important;
@@ -36,8 +36,8 @@
                     <label class="block text-sm font-semibold text-slate-700">
                         เลือกทรงผมที่ต้องการ
                     </label>
-                    <a href="https://drive.google.com" target="_blank" class="text-xs text-blue-600 hover:text-blue-800 font-medium flex items-center gap-1 underline">
-                        📁 คลิกดูแบบทรงผมใน Google Drive
+                    <a href="https://drive.google.com/file/d/1k6njRexMHlMAyj84wCdAJVpYgsy0u27B/view?usp=drivesdk" target="_blank" class="text-xs text-blue-600 hover:text-blue-800 font-medium flex items-center gap-1 underline">
+                        📁 คลิกดูแบบทรงผม
                     </a>
                 </div>
 
@@ -123,30 +123,46 @@
                     </label>
                 </div>
 
-                <div id="print_options" class="hidden bg-blue-50/50 p-4 rounded-xl border border-blue-100 space-y-3">
-                    <div class="flex gap-4 text-sm px-1">
-                        <span class="font-medium text-slate-600">ขนาดภาพ:</span>
-                        <label class="cursor-pointer"><input type="radio" name="print_size" value="1 นิ้ว" checked onchange="calculateTotal()"> 1 นิ้ว</label>
-                        <label class="cursor-pointer"><input type="radio" name="print_size" value="1.5 นิ้ว" onchange="calculateTotal()"> 1.5 นิ้ว</label>
-                        <label class="cursor-pointer"><input type="radio" name="print_size" value="2 นิ้ว" onchange="calculateTotal()"> 2 นิ้ว</label>
+                <div id="print_options" class="hidden bg-blue-50/50 p-4 rounded-xl border border-blue-100 space-y-4">
+                    
+                    <!-- ส่วนเลือกขนาดภาพ (ปรับปรุงใหม่เป็นปุ่ม Checkbox นูนเด่นเด้ง) -->
+                    <div>
+                        <span class="block text-xs font-semibold text-slate-500 mb-2 px-1">เลือกขนาดภาพ:</span>
+                        <div class="grid grid-cols-3 gap-2.5" id="size_group">
+                            <label class="size-card p-2.5 border bg-white rounded-xl flex items-center justify-center cursor-pointer text-sm transition duration-200 shadow-sm selected-box">
+                                <input type="checkbox" name="print_size" value="1 นิ้ว" checked onclick="handleSizeSelection(this)" class="sr-only">
+                                <span>1 นิ้ว</span>
+                            </label>
+                            <label class="size-card p-2.5 border bg-white rounded-xl flex items-center justify-center cursor-pointer text-sm transition duration-200 shadow-sm">
+                                <input type="checkbox" name="print_size" value="1.5 นิ้ว" onclick="handleSizeSelection(this)" class="sr-only">
+                                <span>1.5 นิ้ว</span>
+                            </label>
+                            <label class="size-card p-2.5 border bg-white rounded-xl flex items-center justify-center cursor-pointer text-sm transition duration-200 shadow-sm">
+                                <input type="checkbox" name="print_size" value="2 นิ้ว" onclick="handleSizeSelection(this)" class="sr-only">
+                                <span>2 นิ้ว</span>
+                            </label>
+                        </div>
                     </div>
                     
-                    <!-- แก้ไข: ตัวเลือกจำนวนรูปให้กดแล้วนูนเด่นขึ้นมา -->
-                    <div class="grid grid-cols-2 gap-3" id="quantity_group">
-                        <label class="qty-card p-3 border bg-white rounded-xl flex justify-between items-center cursor-pointer text-sm transition duration-200 shadow-sm selected-box">
-                            <span>
-                                <input type="radio" name="print_quantity" value="90" checked onclick="selectQuantity(this)" class="sr-only"> 
-                                ครึ่งโหล (6 รูป)
-                            </span>
-                            <span class="font-bold">90 บ.</span>
-                        </label>
-                        <label class="qty-card p-3 border bg-white rounded-xl flex justify-between items-center cursor-pointer text-sm transition duration-200 shadow-sm">
-                            <span>
-                                <input type="radio" name="print_quantity" value="120" onclick="selectQuantity(this)" class="sr-only"> 
-                                หนึ่งโหล (12 รูป)
-                            </span>
-                            <span class="font-bold">120 บ.</span>
-                        </label>
+                    <!-- ส่วนเลือกจำนวนรูป (เปลี่ยนเป็นระบบ Checkbox นูนเด่นตามบรีฟ) -->
+                    <div>
+                        <span class="block text-xs font-semibold text-slate-500 mb-2 px-1">เลือกจำนวนแพ็กเกจ:</span>
+                        <div class="grid grid-cols-2 gap-3" id="quantity_group">
+                            <label class="qty-card p-3 border bg-white rounded-xl flex justify-between items-center cursor-pointer text-sm transition duration-200 shadow-sm selected-box">
+                                <span class="flex items-center gap-2">
+                                    <input type="checkbox" id="qty_half" value="90" checked onclick="selectQuantity('half')" class="w-4 h-4 text-blue-600 rounded"> 
+                                    ครึ่งโหล (6 รูป)
+                                </span>
+                                <span class="font-bold text-blue-600">+90.-</span>
+                            </label>
+                            <label class="qty-card p-3 border bg-white rounded-xl flex justify-between items-center cursor-pointer text-sm transition duration-200 shadow-sm">
+                                <span class="flex items-center gap-2">
+                                    <input type="checkbox" id="qty_full" value="120" onclick="selectQuantity('full')" class="w-4 h-4 text-blue-600 rounded"> 
+                                    หนึ่งโหล (12 รูป)
+                                </span>
+                                <span class="font-bold text-blue-600">+120.-</span>
+                            </label>
+                        </div>
                     </div>
                     
                     <textarea id="shipping_address" rows="2" class="w-full p-2.5 border rounded-lg bg-white text-sm outline-none placeholder-slate-400 focus:border-blue-500" placeholder="ระบุ ชื่อ-นามสกุล, เบอร์โทร และที่อยู่จัดส่ง"></textarea>
@@ -233,12 +249,76 @@
             calculateTotal();
         }
 
-        // ฟังก์ชันเลือกจำนวนรูป (นูนเด่นเฉพาะอันที่กด)
-        function selectQuantity(input) {
-            document.querySelectorAll('.qty-card').forEach(card => {
-                card.classList.remove('selected-box');
+        // ฟังก์ชันจัดการเลือก Checkbox ขนาดภาพ (คุมเงื่อนไข ครึ่งโหล=1, 1โหล=2)
+        function handleSizeSelection(clickedCheckbox) {
+            const isFullQty = document.getElementById('qty_full').checked;
+            const checkedSizes = document.querySelectorAll('input[name="print_size"]:checked');
+            
+            if (isFullQty) {
+                // ถ้าเลือก 1 โหล จะเลือกได้สูงสุด 2 ตัวเลือก
+                if (checkedSizes.length > 2) {
+                    clickedCheckbox.checked = false;
+                    alert('แพ็กเกจ 1 โหล สามารถเลือกขนาดผสมกันได้สูงสุด 2 ขนาดเท่านั้นครับ');
+                    return;
+                }
+            } else {
+                // ถ้าเลือก ครึ่งโหล จะเลือกได้แค่ 1 ตัวเลือกเท่านั้น (ทำหน้าที่เหมือน radio)
+                if (checkedSizes.length > 1) {
+                    document.querySelectorAll('input[name="print_size"]').forEach(cb => {
+                        if (cb !== clickedCheckbox) cb.checked = false;
+                    });
+                }
+            }
+            
+            // อัปเดตคลาสดีไซน์นูนเด่นของปุ่มขนาดภาพ
+            document.querySelectorAll('input[name="print_size"]').forEach(cb => {
+                if (cb.checked) {
+                    cb.parentElement.classList.add('selected-box');
+                } else {
+                    cb.parentElement.classList.remove('selected-box');
+                }
             });
-            input.parentElement.parentElement.classList.add('selected-box');
+            
+            calculateTotal();
+        }
+
+        // ฟังก์ชันเลือกจำนวนรูป (สลับการทำงาน Checkbox ล่าง และปรับเปลี่ยนสิทธิ์เลือกขนาดด้านบน)
+        function selectQuantity(type) {
+            const cbHalf = document.getElementById('qty_half');
+            const cbFull = document.getElementById('qty_full');
+            
+            if (type === 'half') {
+                if (cbHalf.checked) {
+                    cbFull.checked = false;
+                } else {
+                    cbHalf.checked = true; // บังคับให้เลือกไว้อย่างน้อยหนึ่งอัน
+                }
+            } else if (type === 'full') {
+                if (cbFull.checked) {
+                    cbHalf.checked = false;
+                } else {
+                    cbFull.checked = true; // บังคับให้เลือกไว้อย่างน้อยหนึ่งอัน
+                }
+            }
+            
+            // ปรับสีไฮไลท์กล่องจำนวนรูป
+            cbHalf.parentElement.parentElement.classList.toggle('selected-box', cbHalf.checked);
+            cbFull.parentElement.parentElement.classList.toggle('selected-box', cbFull.checked);
+            
+            // รีเซ็ตการเลือกขนาดภาพด้านบนให้สอดคล้องกับเงื่อนไขใหม่เพื่อป้องกัน Error ราคา
+            const activeSizes = document.querySelectorAll('input[name="print_size"]:checked');
+            if (cbHalf.checked && activeSizes.length > 1) {
+                // ถ้าสลับมาเป็นครึ่งโหล แต่เดิมเลือกไว้เกิน 1 ขนาด ให้เหลือแค่อันแรกอันเดียว
+                activeSizes.forEach((cb, index) => {
+                    if (index > 0) cb.checked = false;
+                });
+            }
+            
+            // อัปเดตสไตล์ของขนาดภาพอีกครั้ง
+            document.querySelectorAll('input[name="print_size"]').forEach(cb => {
+                cb.parentElement.classList.toggle('selected-box', cb.checked);
+            });
+            
             calculateTotal();
         }
 
@@ -294,13 +374,30 @@
             }
             document.getElementById('formula_express').innerText = ePrice + " บ.";
 
+            // คำนวณฝั่งภาพปรินต์จัดส่ง
             if(document.querySelector('input[name="want_print"]:checked').value === 'yes') {
-                const size = document.querySelector('input[name="print_size"]:checked').value;
-                const qtySelected = document.querySelector('input[name="print_quantity"]:checked');
-                pPrice = qtySelected ? parseInt(qtySelected.value) : 90;
+                // รวมขนาดที่เลือกทั้งหมดมาโชว์ในใบเสร็จ
+                let sizeArray = [];
+                document.querySelectorAll('input[name="print_size"]:checked').forEach(cb => {
+                    sizeArray.push(cb.value);
+                });
+                const sizeText = sizeArray.length > 0 ? sizeArray.join(' + ') : 'ไม่ได้เลือกขนาด';
+
+                const cbHalf = document.getElementById('qty_half');
+                const cbFull = document.getElementById('qty_full');
                 
-                const qText = pPrice === 90 ? "6 รูป" : "12 รูป";
-                items += '<div class="flex justify-between"><span>- ภาพปรินต์ '+size+' ('+qText+')</span><span>'+pPrice.toFixed(2)+'</span></div>';
+                let qText = '';
+                if(cbHalf.checked) {
+                    pPrice = 90;
+                    qText = "ครึ่งโหล (6 รูป)";
+                } else if(cbFull.checked) {
+                    pPrice = 120;
+                    qText = "หนึ่งโหล (12 รูป)";
+                }
+                
+                if(qText) {
+                    items += '<div class="flex justify-between"><span>- ภาพปรินต์ '+sizeText+' ('+qText+')</span><span>'+pPrice.toFixed(2)+'</span></div>';
+                }
                 
                 const addr = document.getElementById('shipping_address').value;
                 if(addr) details += '<p class="break-words">• ที่อยู่จัดส่ง: '+addr+'</p>';
@@ -315,6 +412,8 @@
             document.getElementById('receipt_details').innerHTML = details;
             document.getElementById('receipt_total').innerText = total.toFixed(2) + " THB";
         }
+        
+        // รันครั้งแรกเพื่อให้รูปแบบแสดงผลถูกต้องเริ่มต้น
         calculateTotal();
     </script>
 </body>
