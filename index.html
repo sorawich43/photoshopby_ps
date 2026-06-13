@@ -37,7 +37,7 @@
                         เลือกทรงผมที่ต้องการ
                     </label>
                     <a href="https://drive.google.com/file/d/1k6njRexMHlMAyj84wCdAJVpYgsy0u27B/view?usp=drivesdk" target="_blank" class="text-xs text-blue-600 hover:text-blue-800 font-medium flex items-center gap-1 underline">
-                        📁 คลิกดูแบบทรงผม
+                        📁 คลิกดูแบบทรงผมที่นี่
                     </a>
                 </div>
 
@@ -67,7 +67,7 @@
                 <div class="grid grid-cols-2 gap-3 sm:grid-cols-4" id="suit_group">
                     <label class="suit-card flex items-center justify-center p-3 border rounded-xl cursor-pointer hover:bg-slate-50 transition duration-200">
                         <input type="radio" name="suit_type" value="ทำงาน" class="sr-only" onclick="selectSuit(this, 'ทำงาน')" required>
-                        <span class="text-sm">ชุดสูททำงาน</span>
+                        <span class="text-sm">ชุดทำงาน</span>
                     </label>
                     <label class="suit-card flex items-center justify-center p-3 border rounded-xl cursor-pointer hover:bg-slate-50 transition duration-200">
                         <input type="radio" name="suit_type" value="นักศึกษา" class="sr-only" onclick="selectSuit(this, 'นักศึกษา')">
@@ -403,7 +403,7 @@
             const suitRadio = document.querySelector('input[name="suit_type"]:checked');
             if(suitRadio) {
                 sPrice = 200;
-                items += '<div class="flex justify-between"><span>- ค่าตัดต่อชุดสูท ('+suitRadio.value+')</span><span>'+sPrice.toFixed(2)+'</span></div>';
+                items += '<div class="flex justify-between"><span>- ค่าตัดต่อชุด ('+suitRadio.value+')</span><span>'+sPrice.toFixed(2)+'</span></div>';
                 
                 if(suitRadio.value === 'ครุย' || suitRadio.value === 'นักศึกษา') {
                     const uni = document.getElementById('university_name').value;
